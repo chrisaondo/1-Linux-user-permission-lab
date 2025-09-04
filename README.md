@@ -209,7 +209,7 @@ After running `ls -la`, take a screenshot of the permissions and ownership info.
 > ![File created by 'alice' inherits her primary group instead of 'webdev', illustrating collaboration permission issues.](assets/03-group-ownership-problem.png)  
 > _"File created by 'alice' inherits her primary group instead of 'webdev', illustrating collaboration permission issues."_
 
-Delete the test :
+Delete the test file :
 
 ```bash
 sudo rm /opt/project_alpha/file_by_alice.txt
@@ -613,14 +613,36 @@ A: Only as a last resort. This can leave orphaned processes and files.
 
 ## Clean-Up
 
-To reset this lab environment:
+To reset this lab environment and remove all users, groups, directories, and files created during the lab (including those related to special permissions such as setuid, setgid, and sticky bit), run the following commands:
 
 ```bash
+# Remove lab users and their home directories
 sudo userdel -r alice
 sudo userdel -r bob
+
+# Remove the collaborative group
 sudo groupdel webdev
+
+# Remove the shared project directory
 sudo rm -rf /opt/project_alpha
+
+# Remove test files with special permissions (setuid and setgid examples)
+sudo rm -f /tmp/ls-setuid
+sudo rm -f /tmp/ls-setgid
+
+# Remove directories or files used to demonstrate setgid on directories
+sudo rm -rf /tmp/shared-gid
+
+# Remove sticky bit test directory and files
+sudo rm -rf /tmp/sticky-test
+
+# (Optional) Remove any other temporary files or directories created in /tmp
+sudo find /tmp -maxdepth 1 -name 'test*' -exec rm -rf {} \;
 ```
+
+**Note:**  
+- Only delete files and directories you created during this lab. If you changed permissions or ownership on existing system files, restore their original settings instead of deleting them.
+- Always double-check before running destructive commands, especially `rm -rf`.
 
 ---
 
